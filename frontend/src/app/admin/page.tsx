@@ -1,153 +1,130 @@
 "use client";
 
-import { useState } from "react";
-import { UploadCloud, CheckCircle, Plus, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
-import { uploadPayslipToStoracha } from "@/utils/storacha";
+import { ArrowLeft, Shield, Plus, Database, Brain, Activity, Wallet, FileLock2, Search } from "lucide-react";
 
 export default function AdminDashboard() {
-  const [isUploading, setIsUploading] = useState(false);
-  const [payslipCID, setPayslipCID] = useState<string | null>(null);
-
-  const handleAddEmployee = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsUploading(true);
-    
-    // Placeholder logic to simulate IPFS upload
-    const mockPayslipData = { name: "John Doe", amount: "5000 USDC", timestamp: Date.now() };
-    const cid = await uploadPayslipToStoracha(mockPayslipData);
-    
-    setPayslipCID(cid);
-    setIsUploading(false);
-  };
-
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-[oklch(0.95_0.01_250)] p-6 md:p-12 lg:p-24 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-[0%] left-[20%] w-[30%] h-[40%] bg-[oklch(0.6_0.2_250)]/10 blur-[120px] rounded-full pointer-events-none" />
-
-      <header className="flex justify-between items-center mb-16 relative z-10">
-        <div>
-          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-2">
-            Admin Dashboard
-          </h1>
-          <p className="text-[oklch(0.7_0.02_250)] text-lg">
-            Manage DAO treasury and employee payrolls securely.
-          </p>
+    <main className="min-h-screen bg-[#050B08] text-white selection:bg-emerald-500/30">
+      <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-[#050B08]/80 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors">
+            <ArrowLeft className="w-4 h-4" /> Back Home
+          </Link>
+          <div className="flex items-center gap-4">
+            <span className="text-emerald-400 font-bold tracking-widest uppercase text-sm">DAO Treasury Admin</span>
+            <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/50 flex items-center justify-center">
+              <Shield className="w-4 h-4 text-emerald-400" />
+            </div>
+          </div>
         </div>
-        <Link 
-          href="/" 
-          className="flex items-center gap-2 text-sm text-[oklch(0.7_0.02_250)] hover:text-white transition-colors duration-200"
-        >
-          <LayoutDashboard className="w-4 h-4" />
-          Back Home
-        </Link>
-      </header>
+      </nav>
 
-      <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10 max-w-[1280px] mx-auto">
-        {/* Deposit Funds Panel */}
-        <section className="col-span-1 lg:col-span-5 flex flex-col gap-6">
-          <div className="glass-panel p-8">
-            <h2 className="text-2xl font-medium text-white mb-6">Treasury Overview</h2>
-            <div className="flex flex-col gap-4 mb-8">
-              <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-                <span className="block text-sm text-[oklch(0.7_0.02_250)] mb-1">Available Balance</span>
-                <span className="text-4xl font-semibold tracking-tight">120,500 USDC</span>
+      <div className="max-w-7xl mx-auto px-6 pt-32 pb-24">
+        <h1 className="text-4xl font-bold tracking-tighter mb-12">Treasury Dashboard</h1>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          {/* Main Stats Area */}
+          <div className="lg:col-span-2 space-y-8">
+            
+            {/* Financial Overview Bento */}
+            <div className="bg-[#0A140F] border border-emerald-500/20 rounded-3xl p-8 shadow-[0_0_40px_rgba(16,185,129,0.05)] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none" />
+              <div className="flex justify-between items-start mb-8 relative z-10">
+                <div>
+                  <h2 className="text-white/60 font-medium mb-1">Total Treasury Balance</h2>
+                  <div className="text-5xl font-black text-white">$1,240,500.00 <span className="text-lg text-emerald-400 font-normal">USDC</span></div>
+                </div>
+                <button className="bg-white text-black px-6 py-2.5 rounded-full font-bold text-sm hover:bg-emerald-50 transition-colors flex items-center gap-2">
+                  <Wallet className="w-4 h-4" /> Deposit
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4 relative z-10">
+                <div className="bg-[#050B08] border border-white/5 rounded-2xl p-6">
+                  <div className="text-white/50 text-sm mb-2 flex items-center gap-2"><FileLock2 className="w-4 h-4" /> Encrypted Payroll Outflow</div>
+                  <div className="text-2xl font-bold text-emerald-400">████████</div>
+                  <div className="text-xs text-white/30 mt-2">Only AI Treasury Agent can parse total flow</div>
+                </div>
+                <div className="bg-[#050B08] border border-white/5 rounded-2xl p-6">
+                  <div className="text-white/50 text-sm mb-2 flex items-center gap-2"><Activity className="w-4 h-4 text-blue-400" /> Active Contractors</div>
+                  <div className="text-2xl font-bold text-white">12 Verified</div>
+                  <div className="text-xs text-white/30 mt-2">World ID Sybil Resistance Active</div>
+                </div>
               </div>
             </div>
 
-            <form className="space-y-4">
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-[oklch(0.8_0.02_250)]">Deposit Amount</label>
-                <input 
-                  type="number" 
-                  placeholder="0.00 USDC" 
-                  className="premium-input w-full text-lg"
-                />
+            {/* Employee List */}
+            <div className="bg-[#0A140F] border border-white/5 rounded-3xl p-8">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-xl font-bold">Encrypted Cap Table</h2>
+                <div className="bg-[#050B08] border border-white/5 rounded-full px-4 py-2 flex items-center gap-2">
+                  <Search className="w-4 h-4 text-white/40" />
+                  <input type="text" placeholder="Search wallet..." className="bg-transparent border-none outline-none text-sm text-white w-32" />
+                </div>
               </div>
-              <button 
-                type="button" 
-                className="w-full premium-btn flex items-center justify-center gap-2 mt-2"
-              >
-                <Plus className="w-5 h-5" />
-                Deposit Funds
-              </button>
-            </form>
-          </div>
-        </section>
 
-        {/* Add Employee Panel */}
-        <section className="col-span-1 lg:col-span-7 flex flex-col gap-6">
-          <div className="glass-panel p-8 relative overflow-hidden">
-            <h2 className="text-2xl font-medium text-white mb-6">Add Employee & Distribute</h2>
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="flex items-center justify-between bg-[#050B08] border border-white/5 rounded-2xl p-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                        <Shield className="w-5 h-5 text-emerald-400" />
+                      </div>
+                      <div>
+                        <div className="font-mono text-sm text-white/80">0x71C...9A{i}B</div>
+                        <div className="text-xs text-white/40">Frontend Developer</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-mono text-emerald-400">euint64(████)</div>
+                      <div className="text-xs text-white/40">Zama FHE Encrypted</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+
+          {/* Action Sidebar */}
+          <div className="space-y-8">
             
-            <form onSubmit={handleAddEmployee} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-medium text-[oklch(0.8_0.02_250)]">Wallet Address</label>
-                  <input 
-                    type="text" 
-                    placeholder="0x..." 
-                    className="premium-input w-full"
-                    required
-                  />
+            <div className="bg-[#0A140F] border border-emerald-500/20 rounded-3xl p-8">
+              <h2 className="text-xl font-bold mb-6 flex items-center gap-2"><Plus className="w-5 h-5 text-emerald-400" /> Onboard Contributor</h2>
+              <form className="space-y-4">
+                <div>
+                  <label className="text-xs text-white/50 uppercase tracking-wider mb-2 block">Wallet Address</label>
+                  <input type="text" className="w-full bg-[#050B08] border border-white/10 rounded-xl p-3 text-white outline-none focus:border-emerald-500/50 font-mono text-sm" placeholder="0x..." />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-medium text-[oklch(0.8_0.02_250)]">Encrypted Salary</label>
-                  <input 
-                    type="number" 
-                    placeholder="Amount in USDC" 
-                    className="premium-input w-full"
-                    required
-                  />
-                  <span className="text-xs text-[oklch(0.6_0.02_250)]">
-                    Amount will be encrypted on-chain.
-                  </span>
+                <div>
+                  <label className="text-xs text-white/50 uppercase tracking-wider mb-2 block">Monthly Salary (USDC)</label>
+                  <input type="text" className="w-full bg-[#050B08] border border-white/10 rounded-xl p-3 text-white outline-none focus:border-emerald-500/50 font-mono text-sm" placeholder="5000" />
                 </div>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-[oklch(0.8_0.02_250)]">Decentralized Payslip</label>
-                <div className="flex items-center gap-4 p-4 rounded-xl border border-dashed border-white/20 bg-white/[0.01]">
-                  <div className="p-3 bg-white/[0.05] rounded-lg">
-                    <UploadCloud className="w-6 h-6 text-[oklch(0.7_0.02_250)]" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-white">Generate & Upload IPFS Payslip</p>
-                    <p className="text-xs text-[oklch(0.6_0.02_250)]">Stored securely via Storacha/Filecoin</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-white/10 flex justify-end">
-                <button 
-                  type="submit" 
-                  disabled={isUploading}
-                  className="premium-btn flex items-center gap-2"
-                >
-                  {isUploading ? (
-                    <span className="animate-pulse">Uploading to IPFS...</span>
-                  ) : (
-                    <>
-                      <CheckCircle className="w-5 h-5" />
-                      Add & Encrypt Salary
-                    </>
-                  )}
+                <button type="button" className="w-full bg-emerald-500 text-[#050B08] font-bold py-4 rounded-xl hover:bg-emerald-400 transition-colors mt-4 flex items-center justify-center gap-2">
+                  <Shield className="w-4 h-4" /> Encrypt & Deploy to Zama
                 </button>
-              </div>
-
-              {payslipCID && (
-                <div className="p-4 rounded-xl bg-[oklch(0.4_0.2_140)]/20 border border-[oklch(0.5_0.2_140)]/30 mt-4 flex flex-col gap-1">
-                  <span className="text-sm text-[oklch(0.8_0.2_140)] font-medium">Success! Payslip uploaded to Storacha.</span>
-                  <a href={`https://dweb.link/ipfs/${payslipCID}`} target="_blank" rel="noreferrer" className="text-xs text-[oklch(0.6_0.1_140)] underline truncate">
-                    ipfs://{payslipCID}
-                  </a>
+                <div className="text-center text-xs text-white/40 mt-4 flex items-center justify-center gap-1">
+                  <Database className="w-3 h-3 text-teal-400" /> Contract auto-pins to Filecoin
                 </div>
-              )}
-            </form>
+              </form>
+            </div>
+
+            <div className="bg-[#0A140F] border border-white/5 rounded-3xl p-8">
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2"><Brain className="w-5 h-5 text-emerald-400" /> 0G Treasury AI</h2>
+              <p className="text-white/60 text-sm leading-relaxed mb-6">
+                Our autonomous agent analyzes encrypted total outflow to forecast runway without breaking FHE privacy.
+              </p>
+              <button className="w-full bg-white/5 text-white border border-white/10 font-bold py-3 rounded-xl hover:bg-white/10 transition-colors text-sm">
+                Generate AI Runway Report
+              </button>
+            </div>
+
           </div>
-        </section>
-      </main>
-    </div>
+
+        </div>
+      </div>
+    </main>
   );
 }
