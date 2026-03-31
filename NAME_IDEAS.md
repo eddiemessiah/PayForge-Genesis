@@ -1,6 +1,6 @@
 # 10 Premium Name Ideas for the Confidential Payroll Dapp
 
-1. **PayForge** *(Solid, industrial, modular)*
+1. **ZamaPay** *(Solid, industrial, modular)*
 2. **ModuloPay** *(Highlights the 'Modular Worlds' PL Genesis theme)*
 3. **SilentStream** *(Focuses on privacy/FHE and automated payouts)*
 4. **Cloaked** *(Simple, elegant, Web2-style SaaS name)*
@@ -12,5 +12,5 @@
 10. **CipherWage** *(Direct, descriptive, crypto-native)*
 
 ## Recommendation for the Video:
-Go with **"PayForge: The Confidential Modular Payroll Engine."** 
+Go with **"ZamaPay: The Confidential Modular Payroll Engine."** 
 It sounds like a real, funded startup. It implies both building (Forge) and payments (Pay), and perfectly fits the "Frontiers of Collaboration" theme.

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PayForge - Decentralized Payroll",
+  title: "ZamaPay - Decentralized Payroll",
   description: "Secure, transparent, and efficient DAO payroll management.",
 };
 

@@ -1,8 +1,8 @@
-# PayForge Smart Contract Audit Report
+# ZamaPay Smart Contract Audit Report
 
 ## Scope
 - `ConfidentialPayroll.sol`
-- `PayForgeFactory.sol`
+- `ZamaPayFactory.sol`
 
 ## Security Considerations & FHE Integration
 1. **Access Control:** Verified. Only the `employer` (deployer via Factory) can add employees or modify encrypted salaries.
