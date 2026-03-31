@@ -1,179 +1,135 @@
 "use client";
 
-import { useState } from "react";
-import { Unlock, HandCoins, FileText, LayoutDashboard, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { ArrowLeft, Wallet, Shield, Globe, Lock, Unlock, FileText, Briefcase, Activity } from "lucide-react";
 
-export default function EmployeeDashboard() {
-  const [isDecrypting, setIsDecrypting] = useState(false);
-  const [isClaiming, setIsClaiming] = useState(false);
-  const [decryptedAmount, setDecryptedAmount] = useState<string | null>(null);
-
-  const handleDecrypt = () => {
-    setIsDecrypting(true);
-    // Simulate ZK / encryption logic delay
-    setTimeout(() => {
-      setDecryptedAmount("5,000 USDC");
-      setIsDecrypting(false);
-    }, 1500);
-  };
-
-  const handleClaim = () => {
-    setIsClaiming(true);
-    // Simulate transaction delay
-    setTimeout(() => {
-      alert("Funds claimed successfully to your wallet!");
-      setIsClaiming(false);
-    }, 2000);
-  };
-
+export default function EmployeePortal() {
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-[oklch(0.95_0.01_250)] p-6 md:p-12 lg:p-24 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-[-10%] right-[10%] w-[40%] h-[40%] bg-[oklch(0.6_0.2_290)]/10 blur-[120px] rounded-full pointer-events-none" />
-
-      <header className="flex justify-between items-center mb-16 relative z-10">
-        <div>
-          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-2">
-            Employee Portal
-          </h1>
-          <p className="text-[oklch(0.7_0.02_250)] text-lg">
-            Access your payslips and claim your encrypted salary.
-          </p>
+    <main className="min-h-screen bg-[#050B08] text-white selection:bg-emerald-500/30">
+      <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-[#050B08]/80 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors">
+            <ArrowLeft className="w-4 h-4" /> Back Home
+          </Link>
+          <div className="flex items-center gap-4">
+            <span className="text-blue-400 font-bold tracking-widest uppercase text-sm">Contributor Portal</span>
+            <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center">
+              <Globe className="w-4 h-4 text-blue-400" />
+            </div>
+          </div>
         </div>
-        <Link 
-          href="/" 
-          className="flex items-center gap-2 text-sm text-[oklch(0.7_0.02_250)] hover:text-white transition-colors duration-200"
-        >
-          <LayoutDashboard className="w-4 h-4" />
-          Back Home
-        </Link>
-      </header>
+      </nav>
 
-      <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10 max-w-[1024px] mx-auto">
-        {/* Salary Panel */}
-        <section className="flex flex-col gap-6">
-          <div className="glass-panel p-8">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-medium text-white">Current Period</h2>
-              <span className="px-3 py-1 rounded-full bg-[oklch(0.4_0.2_140)]/20 text-[oklch(0.8_0.2_140)] text-xs font-medium border border-[oklch(0.5_0.2_140)]/30">
-                Ready to Claim
-              </span>
-            </div>
+      <div className="max-w-7xl mx-auto px-6 pt-32 pb-24">
+        <h1 className="text-4xl font-bold tracking-tighter mb-12">My Paystreams</h1>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          <div className="lg:col-span-2 space-y-8">
             
-            <div className="flex flex-col gap-6 mb-8">
-              <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 relative overflow-hidden">
-                <span className="block text-sm text-[oklch(0.7_0.02_250)] mb-2">Allocated Salary</span>
-                {decryptedAmount ? (
-                  <div className="flex items-center gap-3">
-                    <span className="text-4xl font-semibold tracking-tight text-white">
-                      {decryptedAmount}
-                    </span>
-                    <ShieldCheck className="w-6 h-6 text-[oklch(0.7_0.2_140)]" />
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-3">
-                    <span className="text-4xl font-mono text-[oklch(0.5_0.02_250)] tracking-widest">
-                      **** **
-                    </span>
-                    <span className="text-xs text-[oklch(0.6_0.02_250)] px-2 py-1 bg-white/5 rounded">Encrypted</span>
-                  </div>
-                )}
+            {/* Verify Section */}
+            <div className="bg-[#0A140F] border border-blue-500/20 rounded-3xl p-8 shadow-[0_0_40px_rgba(59,130,246,0.05)] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full pointer-events-none" />
+              <div className="flex justify-between items-start mb-8 relative z-10">
+                <div>
+                  <h2 className="text-white font-bold text-2xl mb-2 flex items-center gap-3"><Globe className="w-6 h-6 text-blue-400"/> World ID Verification</h2>
+                  <p className="text-white/50">Prove you are a unique human to unlock your encrypted salary claims across multiple DAOs.</p>
+                </div>
+                <button className="bg-blue-500 text-black px-6 py-2.5 rounded-full font-bold text-sm hover:bg-blue-400 transition-colors flex items-center gap-2">
+                  Verify <Shield className="w-4 h-4" />
+                </button>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              {!decryptedAmount ? (
-                <button 
-                  onClick={handleDecrypt}
-                  disabled={isDecrypting}
-                  className="flex-1 premium-btn flex items-center justify-center gap-2 bg-white/[0.05] hover:bg-white/[0.08] border border-white/10"
-                >
-                  {isDecrypting ? (
-                    <span className="animate-pulse">Decrypting Protocol...</span>
-                  ) : (
-                    <>
-                      <Unlock className="w-5 h-5" />
-                      Decrypt Salary
-                    </>
-                  )}
-                </button>
-              ) : (
-                <button 
-                  onClick={handleClaim}
-                  disabled={isClaiming}
-                  className="flex-1 premium-btn flex items-center justify-center gap-2"
-                >
-                  {isClaiming ? (
-                    <span className="animate-pulse">Processing Claim...</span>
-                  ) : (
-                    <>
-                      <HandCoins className="w-5 h-5" />
-                      Claim Funds
-                    </>
-                  )}
-                </button>
-              )}
+            {/* Employers List */}
+            <h2 className="text-xl font-bold mb-4 mt-12 flex items-center gap-2"><Briefcase className="w-5 h-5 text-emerald-400" /> Connected Employers</h2>
+            
+            {/* Employer Card 1 */}
+            <div className="bg-[#0A140F] border border-white/5 rounded-3xl p-8 mb-6">
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#050B08] border border-white/10 flex items-center justify-center font-bold text-xl">D</div>
+                  <div>
+                    <div className="font-bold text-lg">DeFi Protocol DAO</div>
+                    <div className="text-sm text-white/40">Core Contributor • Joined Jan 2026</div>
+                  </div>
+                </div>
+                <div className="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border border-emerald-500/20">
+                  Active
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#050B08] border border-white/5 rounded-2xl p-6">
+                  <div className="text-white/50 text-sm mb-2 flex items-center gap-2"><Lock className="w-4 h-4" /> Encrypted Allocation</div>
+                  <div className="text-2xl font-mono text-emerald-400 mb-2">euint64(████)</div>
+                  <button className="text-xs font-bold text-white bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition-colors flex items-center gap-1">
+                    <Unlock className="w-3 h-3" /> Request Decryption
+                  </button>
+                </div>
+                <div className="bg-[#050B08] border border-white/5 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+                  <FileText className="w-6 h-6 text-teal-400 mb-2" />
+                  <div className="text-sm font-bold text-white mb-1">View Payslip</div>
+                  <div className="text-xs text-white/40">Pinned to Filecoin via Storacha</div>
+                </div>
+              </div>
             </div>
+
+            {/* Employer Card 2 */}
+            <div className="bg-[#0A140F] border border-white/5 rounded-3xl p-8 opacity-75 hover:opacity-100 transition-opacity">
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-[#050B08] border border-white/10 flex items-center justify-center font-bold text-xl">O</div>
+                  <div>
+                    <div className="font-bold text-lg">Omni-Chain Labs</div>
+                    <div className="text-sm text-white/40">Smart Contract Auditor • Joined Mar 2026</div>
+                  </div>
+                </div>
+                <div className="bg-white/5 text-white/40 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border border-white/10">
+                  Pending Claim
+                </div>
+              </div>
+            </div>
+
           </div>
-        </section>
 
-        {/* Payslips Panel */}
-        <section className="flex flex-col gap-6">
-          <div className="glass-panel p-8 h-full">
-            <h2 className="text-2xl font-medium text-white mb-6">Decentralized Payslips</h2>
-            <p className="text-[oklch(0.7_0.02_250)] text-sm mb-6">
-              Your payroll records are stored immutably on IPFS via Storacha. Only you hold the decryption keys.
-            </p>
-
-            <div className="space-y-4">
-              {/* Mock Payslip Record */}
-              <div className="group flex items-center justify-between p-4 rounded-xl border border-white/10 bg-white/[0.01] hover:bg-white/[0.03] transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-white/[0.05] rounded-lg group-hover:bg-[oklch(0.4_0.2_250)]/20 transition-colors">
-                    <FileText className="w-5 h-5 text-[oklch(0.8_0.02_250)] group-hover:text-[oklch(0.8_0.2_250)]" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-white">March 2026 Salary</p>
-                    <p className="text-xs text-[oklch(0.6_0.02_250)] mt-0.5 truncate max-w-[150px] sm:max-w-[200px]">
-                      ipfs://bafybeigdyr...f3oclgtqy55fbzdi
-                    </p>
-                  </div>
-                </div>
-                <a 
-                  href="#"
-                  className="text-sm font-medium text-[oklch(0.7_0.2_250)] hover:text-[oklch(0.8_0.2_250)]"
-                  onClick={(e) => { e.preventDefault(); alert("Opening IPFS link..."); }}
-                >
-                  View
-                </a>
+          {/* Action Sidebar */}
+          <div className="space-y-8">
+            <div className="bg-[#0A140F] border border-emerald-500/20 rounded-3xl p-8">
+              <h2 className="text-xl font-bold mb-6">Quick Claim</h2>
+              <div className="bg-[#050B08] border border-white/5 rounded-2xl p-6 mb-6">
+                <div className="text-sm text-white/50 mb-2">Available Balance (Decrypted)</div>
+                <div className="text-4xl font-black text-white mb-1">$5,240.<span className="text-2xl text-emerald-400">00</span></div>
+                <div className="text-xs text-white/30">From DeFi Protocol DAO</div>
               </div>
+              <button className="w-full bg-emerald-500 text-[#050B08] font-bold py-4 rounded-xl hover:bg-emerald-400 transition-colors flex items-center justify-center gap-2">
+                <Wallet className="w-5 h-5" /> Claim USDC to Wallet
+              </button>
+            </div>
 
-              {/* Another Mock Record */}
-              <div className="group flex items-center justify-between p-4 rounded-xl border border-white/10 bg-white/[0.01] hover:bg-white/[0.03] transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-white/[0.05] rounded-lg group-hover:bg-[oklch(0.4_0.2_250)]/20 transition-colors">
-                    <FileText className="w-5 h-5 text-[oklch(0.8_0.02_250)] group-hover:text-[oklch(0.8_0.2_250)]" />
-                  </div>
+            <div className="bg-[#0A140F] border border-white/5 rounded-3xl p-8">
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-2"><Activity className="w-4 h-4 text-emerald-400" /> Recent Activity</h2>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center border-b border-white/5 pb-4">
                   <div>
-                    <p className="text-sm font-medium text-white">February 2026 Salary</p>
-                    <p className="text-xs text-[oklch(0.6_0.02_250)] mt-0.5 truncate max-w-[150px] sm:max-w-[200px]">
-                      ipfs://bafybeifk4v...5xdfy5rt3f6pqq
-                    </p>
+                    <div className="text-sm font-medium">Decrypted Claim</div>
+                    <div className="text-xs text-white/40">Mar 15, 2026</div>
                   </div>
+                  <div className="text-sm font-mono text-emerald-400">+$4,500 USDC</div>
                 </div>
-                <a 
-                  href="#"
-                  className="text-sm font-medium text-[oklch(0.7_0.2_250)] hover:text-[oklch(0.8_0.2_250)]"
-                  onClick={(e) => { e.preventDefault(); alert("Opening IPFS link..."); }}
-                >
-                  View
-                </a>
+                <div className="flex justify-between items-center border-b border-white/5 pb-4">
+                  <div>
+                    <div className="text-sm font-medium">World ID Sync</div>
+                    <div className="text-xs text-white/40">Mar 01, 2026</div>
+                  </div>
+                  <div className="text-sm font-bold text-blue-400">Verified</div>
+                </div>
               </div>
             </div>
           </div>
-        </section>
-      </main>
-    </div>
+
+        </div>
+      </div>
+    </main>
   );
 }
