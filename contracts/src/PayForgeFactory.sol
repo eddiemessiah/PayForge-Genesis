@@ -3,7 +3,7 @@ pragma solidity ^0.8.24;
 
 import "./ConfidentialPayroll.sol";
 
-contract ZamaPayFactory {
+contract PayForgeFactory {
     event PayrollCreated(address indexed employer, address payrollAddress);
 
     function createPayroll() external returns (address) {
