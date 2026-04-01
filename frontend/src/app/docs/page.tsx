@@ -32,7 +32,7 @@ export default function DocsPage() {
             </p>
             <div className="bg-[#050B08] border border-white/5 p-6 rounded-xl font-mono text-sm text-emerald-400 shadow-inner relative z-10">
               import "fhevm/lib/TFHE.sol";<br/><br/>
-              mapping(address => euint64) private _encryptedSalaries;
+              mapping(address =&gt; euint64) private _encryptedSalaries;
             </div>
           </div>
 
