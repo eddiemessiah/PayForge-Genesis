@@ -1,11 +1,29 @@
 import { NextResponse } from 'next/server';
+import { db } from '../db';
 
 export async function GET() {
-  return NextResponse.json([
-    { role: 'Core Smart Contract Dev', address: '0x71C...9A1B', status: 'Active', allocation: 'euint64(████)' },
-    { role: 'Frontend Architect', address: '0x42B...1F2A', status: 'Active', allocation: 'euint64(████)' },
-    { role: 'Treasury Manager', address: '0x99D...8E3C', status: 'Pending World ID', allocation: 'euint64(████)' },
-    { role: 'Marketing Lead', address: '0x11A...4B5D', status: 'Active', allocation: 'euint64(████)' },
-    { role: 'Community Manager', address: '0x33F...7C8E', status: 'Active', allocation: 'euint64(████)' },
-  ]);
+  return NextResponse.json({ success: true, data: db.employees });
+}
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const newEmployee = {
+      role: body.role || 'New Contributor',
+      address: body.address,
+      status: 'Active',
+    };
+    db.employees.unshift(newEmployee);
+    
+    // Mock Filecoin storage via Lighthouse / web3.storage pinning
+    const filecoinCid = "bafybeig" + Math.random().toString(36).substring(2, 10) + "mockhash";
+
+    return NextResponse.json({ 
+      success: true, 
+      data: newEmployee,
+      filecoinCid
+    });
+  } catch (err) {
+    return NextResponse.json({ success: false, error: 'Failed' }, { status: 500 });
+  }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   Users, Wallet, LayoutDashboard, Settings, Plus, Activity,
   Lock, FileText, ChevronRight, Search, Menu, Bell, 
@@ -13,10 +13,25 @@ export default function AdminDashboard() {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
 
+  // State
+  const [capTable, setCapTable] = useState<any[]>([]);
+  const [loadingEmployees, setLoadingEmployees] = useState(true);
+
   // Onboarding State
   const [onboardState, setOnboardState] = useState<"idle" | "encrypting" | "pinning" | "success">("idle");
   const [newEmployeeAddress, setNewEmployeeAddress] = useState("");
   const [newEmployeeSalary, setNewEmployeeSalary] = useState("");
+  const [newEmployeeRole, setNewEmployeeRole] = useState("");
+
+  useEffect(() => {
+    fetch('/api/employees')
+      .then(res => res.json())
+      .then(json => {
+        if(json.success) setCapTable(json.data);
+        setLoadingEmployees(false);
+      })
+      .catch(console.error);
+  }, []);
 
   const handleConnectWallet = () => {
     setIsConnecting(true);
@@ -26,19 +41,38 @@ export default function AdminDashboard() {
     }, 1500);
   };
 
-  const handleOnboard = (e: React.FormEvent) => {
+  const handleOnboard = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newEmployeeAddress || !newEmployeeSalary) return;
     
     setOnboardState("encrypting");
-    setTimeout(() => {
+    setTimeout(async () => {
       setOnboardState("pinning");
-      setTimeout(() => {
-        setOnboardState("success");
-        setNewEmployeeAddress("");
-        setNewEmployeeSalary("");
-        setTimeout(() => setOnboardState("idle"), 3000);
-      }, 2000);
+      
+      // Perform API call
+      try {
+        const res = await fetch('/api/employees', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            address: newEmployeeAddress,
+            role: newEmployeeRole || 'Payroll Recipient'
+          })
+        });
+        const json = await res.json();
+        
+        if(json.success) {
+          setOnboardState("success");
+          setCapTable(prev => [json.data, ...prev]);
+          setNewEmployeeAddress("");
+          setNewEmployeeSalary("");
+          setNewEmployeeRole("");
+          setTimeout(() => setOnboardState("idle"), 3000);
+        }
+      } catch(e) {
+        console.error(e);
+        setOnboardState("idle");
+      }
     }, 2000);
   };
 
@@ -73,10 +107,6 @@ export default function AdminDashboard() {
               <span className="capitalize">{tab}</span>
             </button>
           ))}
-          <div className="px-4 text-[10px] font-bold tracking-widest text-white/30 uppercase mb-4 mt-8">System</div>
-          <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all text-sm font-semibold text-white/40 hover:bg-white/5 hover:text-white border border-transparent">
-            <Settings className="w-4 h-4" /> Settings
-          </button>
         </nav>
         <div className="p-6 border-t border-white/5 bg-gradient-to-b from-transparent to-[#050B08]/50">
           {isWalletConnected ? (
@@ -113,20 +143,15 @@ export default function AdminDashboard() {
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold tracking-wide">
               <Lock className="w-3 h-3" /> FHE Active
             </div>
-            <button className="relative p-2 rounded-full hover:bg-white/5 transition-colors">
-              <Bell className="w-5 h-5 text-white/40 hover:text-white" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full border-[1.5px] border-[#020504]" />
-            </button>
             <Link href="/" className="text-xs font-bold text-white/40 hover:text-emerald-400 transition-colors flex items-center gap-1.5 bg-white/5 px-4 py-2 rounded-full">
               Exit App <ChevronRight className="w-3 h-3" />
             </Link>
           </div>
         </header>
 
-        {/* Dashboard Body - High Density Bento */}
+        {/* Dashboard Body */}
         <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
           
-          {/* Top KPI Row */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Main Balance */}
             <div className="md:col-span-2 bg-gradient-to-br from-[#0A140F] to-[#050B08] border border-white/5 rounded-[2rem] p-8 relative overflow-hidden group">
@@ -146,9 +171,6 @@ export default function AdminDashboard() {
                 <div className="flex gap-3">
                   <button className="bg-emerald-500 text-[#020504] px-6 py-2.5 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-[0_0_20px_rgba(16,185,129,0.2)]">
                     Fund Contract
-                  </button>
-                  <button className="bg-white/5 text-white border border-white/10 px-6 py-2.5 rounded-full font-bold text-sm hover:bg-white/10 transition-colors">
-                    Withdraw
                   </button>
                 </div>
               </div>
@@ -173,22 +195,20 @@ export default function AdminDashboard() {
             <div className="bg-[#050B08] border border-white/5 rounded-[2rem] p-6 flex flex-col justify-between">
               <div>
                 <div className="text-white/40 text-xs font-bold tracking-widest uppercase mb-4 flex items-center gap-2"><Users className="w-3 h-3 text-blue-400"/> Contributors</div>
-                <div className="text-4xl font-black">12</div>
+                <div className="text-4xl font-black">{capTable.length}</div>
               </div>
               <div className="mt-6 flex items-center gap-2">
                 <div className="flex -space-x-3">
-                  {[1,2,3,4].map(i => (
+                  {capTable.slice(0, 4).map((_, i) => (
                     <div key={i} className={`w-8 h-8 rounded-full border-2 border-[#050B08] bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center text-[10px] font-bold`} style={{ zIndex: 5-i}}>
                       0x
                     </div>
                   ))}
                 </div>
-                <div className="text-xs font-bold text-white/30">+8 more</div>
               </div>
             </div>
           </div>
 
-          {/* Lower Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Encrypted Cap Table */}
@@ -208,13 +228,11 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {[
-                      { role: 'Core Smart Contract Dev', address: '0x71C...9A1B', status: 'Active' },
-                      { role: 'Frontend Architect', address: '0x42B...1F2A', status: 'Active' },
-                      { role: 'Treasury Manager', address: '0x99D...8E3C', status: 'Pending World ID' },
-                      { role: 'Marketing Lead', address: '0x11A...4B5D', status: 'Active' },
-                      { role: 'Community Manager', address: '0x33F...7C8E', status: 'Active' },
-                    ].map((row, i) => (
+                    {loadingEmployees ? (
+                      <tr>
+                        <td colSpan={3} className="px-4 py-8 text-center text-white/40 text-sm">Loading on-chain data...</td>
+                      </tr>
+                    ) : capTable.map((row, i) => (
                       <tr key={i} className="group hover:bg-white/[0.02] transition-colors border-b border-white/5 last:border-0">
                         <td className="px-4 py-4">
                           <div className="flex items-center gap-3">
@@ -261,32 +279,44 @@ export default function AdminDashboard() {
                       placeholder="0x..." 
                     />
                   </div>
-                  <div>
-                    <label className="text-[10px] font-bold tracking-widest text-white/30 uppercase block mb-1.5">Monthly USDC Allocation</label>
-                    <input 
-                      type="text" 
-                      value={newEmployeeSalary}
-                      onChange={(e) => setNewEmployeeSalary(e.target.value)}
-                      className="w-full bg-white/[0.02] border border-white/10 rounded-xl p-3 text-sm font-mono text-white outline-none focus:border-emerald-500/50 transition-colors" 
-                      placeholder="5000" 
-                    />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-[10px] font-bold tracking-widest text-white/30 uppercase block mb-1.5">Role</label>
+                      <input 
+                        type="text" 
+                        value={newEmployeeRole}
+                        onChange={(e) => setNewEmployeeRole(e.target.value)}
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-xl p-3 text-sm font-mono text-white outline-none focus:border-emerald-500/50 transition-colors" 
+                        placeholder="Developer" 
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold tracking-widest text-white/30 uppercase block mb-1.5">Salary (USDC)</label>
+                      <input 
+                        type="text" 
+                        value={newEmployeeSalary}
+                        onChange={(e) => setNewEmployeeSalary(e.target.value)}
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-xl p-3 text-sm font-mono text-white outline-none focus:border-emerald-500/50 transition-colors" 
+                        placeholder="5000" 
+                      />
+                    </div>
                   </div>
                   
                   {onboardState === "idle" && (
                     <button type="submit" disabled={!newEmployeeAddress || !newEmployeeSalary} className="w-full bg-emerald-500 text-[#020504] px-4 py-3 rounded-xl font-bold text-sm hover:bg-emerald-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2">
-                      Encrypt & Deploy
+                      Encrypt & Add to Protocol
                     </button>
                   )}
 
                   {onboardState === "encrypting" && (
                     <button disabled className="w-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 mt-2">
-                      <Loader2 className="w-4 h-4 animate-spin" /> Encrypting Salary via FHE...
+                      <Loader2 className="w-4 h-4 animate-spin" /> Encrypting via Zama FHE...
                     </button>
                   )}
 
                   {onboardState === "pinning" && (
                     <button disabled className="w-full bg-blue-500/20 border border-blue-500/30 text-blue-400 px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 mt-2">
-                      <Database className="w-4 h-4 animate-pulse" /> Pinning to IPFS (Filecoin)...
+                      <Database className="w-4 h-4 animate-pulse" /> Pinning HR Docs to Filecoin...
                     </button>
                   )}
 
@@ -312,7 +342,7 @@ export default function AdminDashboard() {
                   <div className="flex gap-3">
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5 shrink-0" />
                     <div>
-                      <div className="text-xs font-bold text-white/90">IPFS Payslip Pinned</div>
+                      <div className="text-xs font-bold text-white/90">Filecoin (Lighthouse) Sync</div>
                       <div className="text-[10px] text-white/40 mt-0.5 font-mono">CID: bafy...h7qp</div>
                     </div>
                   </div>

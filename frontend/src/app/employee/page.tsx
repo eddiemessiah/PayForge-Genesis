@@ -1,9 +1,25 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Database, Zap, Wallet, Shield, Globe, Lock, Unlock, FileText, Briefcase, Activity, CheckCircle2, Menu, Bell, ChevronRight, EyeOff } from "lucide-react";
+import { ArrowLeft, Wallet, Shield, Globe, Lock, Unlock, FileText, Briefcase, Activity, CheckCircle2, Menu, Bell, ChevronRight, EyeOff, Database, Zap, Loader2 } from "lucide-react";
 
 export default function EmployeePortal() {
+  const [claimState, setClaimState] = useState<"idle" | "decrypting" | "claiming" | "success">("idle");
+  const [localBalance, setLocalBalance] = useState(5240);
+
+  const handleClaim = () => {
+    setClaimState("decrypting");
+    setTimeout(() => {
+      setClaimState("claiming");
+      setTimeout(() => {
+        setClaimState("success");
+        setLocalBalance(0);
+        setTimeout(() => setClaimState("idle"), 3000);
+      }, 2500);
+    }, 2000);
+  };
+
   return (
     <main className="min-h-screen bg-[#030705] text-white selection:bg-teal-500/30 flex">
       {/* Sidebar Navigation */}
@@ -21,14 +37,14 @@ export default function EmployeePortal() {
             <Activity className="w-5 h-5" />
             <span className="text-sm font-bold tracking-wide">Paystreams</span>
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/50 hover:bg-white/5 hover:text-white transition-all">
+          <Link href="/employee/wallet" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/50 hover:bg-white/5 hover:text-white transition-all">
             <Wallet className="w-5 h-5" />
             <span className="text-sm font-bold tracking-wide">Wallet & Assets</span>
-          </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/50 hover:bg-white/5 hover:text-white transition-all">
+          </Link>
+          <Link href="/employee/worldid" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/50 hover:bg-white/5 hover:text-white transition-all">
             <Globe className="w-5 h-5" />
             <span className="text-sm font-bold tracking-wide">World ID</span>
-          </button>
+          </Link>
         </nav>
         <div className="p-4 border-t border-white/5 shrink-0">
           <div className="bg-white/5 border border-white/5 p-4 rounded-2xl flex items-center gap-3 hover:bg-white/10 transition-colors cursor-pointer">
@@ -69,7 +85,7 @@ export default function EmployeePortal() {
         {/* Dashboard Body */}
         <div className="p-6 md:p-10 max-w-7xl mx-auto w-full space-y-8 flex-1">
           
-          {/* World ID Verification Card (High Contrast) */}
+          {/* World ID Verification Card */}
           <div className="bg-gradient-to-r from-blue-950/40 to-[#030705] border border-blue-500/20 rounded-[2rem] p-8 shadow-[0_0_40px_rgba(59,130,246,0.05)] relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 group">
             <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500/10 blur-[80px] rounded-full pointer-events-none group-hover:bg-blue-500/20 transition-colors" />
             <div className="relative z-10 flex items-start gap-6">
@@ -81,9 +97,9 @@ export default function EmployeePortal() {
                 <p className="text-white/60 text-sm max-w-xl leading-relaxed">To claim encrypted FHE paystreams across multiple DAOs, you must prove unique humanity. Gas fees for claims are sponsored upon verification.</p>
               </div>
             </div>
-            <button className="relative z-10 w-full md:w-auto bg-blue-500 text-[#030705] px-8 py-3.5 rounded-full font-bold text-sm hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+            <Link href="/employee/worldid" className="relative z-10 w-full md:w-auto bg-blue-500 text-[#030705] px-8 py-3.5 rounded-full font-bold text-sm hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
               Verify with World App <Shield className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -139,32 +155,13 @@ export default function EmployeePortal() {
                         <div className="text-[10px] text-blue-400 font-mono mt-1">CID: bafy...h7qp</div>
                       </div>
                     </div>
-                    <button className="w-full text-xs font-bold text-white bg-white/5 py-2.5 rounded-xl hover:bg-white/10 transition-colors border border-white/5 mt-4">
+                    <button className="w-full text-xs font-bold text-white bg-white/5 py-2.5 rounded-xl hover:bg-white/10 transition-colors border border-white/5 mt-4 flex items-center justify-center gap-2">
                       Fetch from Filecoin
                     </button>
                   </div>
                 </div>
               </div>
 
-              {/* Employer Card 2 (Pending) */}
-              <div className="bg-[#0A0E0C] border border-white/5 rounded-[2rem] p-8 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 rounded-2xl bg-[#030705] border border-white/10 flex items-center justify-center font-black text-2xl text-white/50">
-                      O
-                    </div>
-                    <div>
-                      <div className="font-bold text-xl text-white">Omni-Chain Labs</div>
-                      <div className="text-sm text-white/50 mt-1 flex items-center gap-2">
-                        Smart Contract Auditor <span className="w-1 h-1 rounded-full bg-white/20"/> Mar 2026
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-white/5 text-white/40 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-white/10">
-                    Awaiting Sync
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Side Action Panel */}
@@ -176,12 +173,30 @@ export default function EmployeePortal() {
                 <div className="bg-[#030705] border border-white/5 rounded-2xl p-6 mb-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/10 blur-[40px] rounded-full pointer-events-none" />
                   <div className="text-xs text-white/40 font-bold uppercase tracking-widest mb-3 flex items-center gap-2"><EyeOff className="w-3.5 h-3.5"/> Locally Decrypted Balance</div>
-                  <div className="text-4xl font-black text-white mb-1">$5,240<span className="text-2xl text-teal-400">.00</span></div>
+                  <div className="text-4xl font-black text-white mb-1">${localBalance.toLocaleString()}<span className="text-2xl text-teal-400">.00</span></div>
                   <div className="text-xs text-white/40 font-mono">From: DeFi Protocol DAO</div>
                 </div>
-                <button className="w-full bg-white text-[#030705] font-bold py-3.5 rounded-xl hover:bg-teal-50 transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:scale-105 active:scale-95 duration-200">
-                  <Wallet className="w-4 h-4" /> Claim USDC to Wallet
-                </button>
+                
+                {claimState === "idle" && (
+                  <button onClick={handleClaim} className="w-full bg-white text-[#030705] font-bold py-3.5 rounded-xl hover:bg-teal-50 transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:scale-105 active:scale-95 duration-200">
+                    <Wallet className="w-4 h-4" /> Claim USDC to Wallet
+                  </button>
+                )}
+                {claimState === "decrypting" && (
+                  <button disabled className="w-full bg-teal-500/20 text-teal-400 border border-teal-500/30 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin" /> Verifying TFHE Ciphertext...
+                  </button>
+                )}
+                {claimState === "claiming" && (
+                  <button disabled className="w-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-pulse" /> Dispatching on fhEVM...
+                  </button>
+                )}
+                {claimState === "success" && (
+                  <button disabled className="w-full bg-emerald-500 text-[#030705] font-bold py-3.5 rounded-xl flex items-center justify-center gap-2">
+                    <CheckCircle2 className="w-4 h-4" /> Claim Successful!
+                  </button>
+                )}
               </div>
 
               {/* Activity Log */}
@@ -199,8 +214,8 @@ export default function EmployeePortal() {
                   <div className="flex gap-4">
                     <div className="w-2 h-2 rounded-full bg-blue-400 mt-1.5 shrink-0" />
                     <div>
-                      <div className="text-sm font-bold text-white/90">World ID Sync Verified</div>
-                      <div className="text-xs text-white/40 mt-1 font-mono">0x46D...e38C Linked</div>
+                      <div className="text-sm font-bold text-white/90">Filecoin Data Sync</div>
+                      <div className="text-xs text-white/40 mt-1 font-mono">CID: bafy...h7qp</div>
                       <div className="text-[10px] text-white/30 mt-1">Mar 01, 2026</div>
                     </div>
                   </div>
@@ -214,5 +229,3 @@ export default function EmployeePortal() {
     </main>
   );
 }
-
-// Missing Zap import resolved locally
